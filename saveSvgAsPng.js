@@ -72,6 +72,17 @@
     }
     return css;
   }
+  
+  function doG(el, options) {
+    var clone = el.cloneNode(true);
+    clone.removeAttribute('transform')
+	
+    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg')
+    svg.setAttribute('width', options.g.width)
+    svg.setAttribute('height', options.g.height)
+    svg.appendChild(clone)
+    return svg;
+  }
 
   out$.svgAsDataUri = function(el, options, cb) {
     options = options || {};
@@ -79,7 +90,9 @@
 
     inlineImages(el, function() {
       var outer = document.createElement("div");
-      var clone = el.cloneNode(true);
+      var clone = options.g ?
+        doG(el, options) :
+        el.cloneNode(true);
       var width = parseInt(
         clone.getAttribute('width')
           || clone.style.width
